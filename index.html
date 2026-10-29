@@ -138,7 +138,7 @@ ${field('이메일','em','이메일 주소를 입력해 주세요','email')}${pw
 <div class="row"><span class="chk" data-a="keep"><span class="box ${S.keep?'on':''}">${S.keep?I('check',12):''}</span>로그인 상태 유지</span><span data-a="forgot" style="cursor:pointer">비밀번호 찾기</span></div>
 <button class="btn" data-a="login" data-enter>로그인</button>
 <p class="row" style="justify-content:center;gap:8px;font-size:13px">아직 계정이 없으신가요? <span class="link" data-a="go" data-k="signup">회원가입</span></p></div>
-<button data-a="inqlink" style="position:absolute;bottom:24px;width:100%;font-size:11px;color:var(--mute)">문의하기</button></div>`,
+<button data-a="inqlink" style="position:absolute;bottom:24px;width:100%;font-size:11px;color:var(--mute)">링크챗 페이지</button></div>`,
 signup:()=>`<div class="scr">${hdr('회원가입')}<div class="body nonav"><p style="font-size:15px;font-weight:700;line-height:1.5">링크 챗에 오신 걸 환영해요 👋</p><p class="sub">몇 가지만 입력하면 바로 시작할 수 있어요</p>
 ${field('이메일','em','이메일 주소를 입력해 주세요','email')}${field('아이디','uid','영문 소문자·숫자·_ 4~20자','text','','autocapitalize="off"')}<p class="help">다른 사람과 겹치지 않는 나만의 아이디예요. 가입 후에는 바꿀 수 없어요</p>
 ${field('이름','nm','이름을 입력해 주세요')}${pwf('비밀번호','pw','8자 이상 입력해 주세요')}<p class="help">영어만 사용 · 특수문자 1개 이상 · 숫자 2개 이상 포함</p>${pwf('비밀번호 확인','pw2','비밀번호를 한 번 더 입력해 주세요')}
@@ -211,7 +211,7 @@ function onIn(){const u=me();if(!u)return;
  const n=total();if(n>lastN&&S.scr!=='chat'){const m=mset();if(m.on)beep(m.snd)}lastN=n}
 addEventListener('storage',e=>{if(e.key===KEY){db=load();onIn();if(S.scr==='settings'||S.scr==='profile')return}if(e.key==='lc_s'&&!sess()){S.scr='login';render()}});
 
-const FORM='https://docs.google.com/forms/d/e/1FAIpQLSd056SYZhs7XZRvRvgqjIxy5C-dfx_xU_3948azM9FPEwW0bg/viewform?usp=header';
+const FORM='https://app.notion.com/p/40747ba07224804f9687facaf5d75397?source=copy_link';
 let acts=[];
 const closeM=()=>{const o=$('#ov');o&&o.remove()};
 function sheet(title,items){closeM();const d=document.createElement('div');d.className='ov';d.id='ov';acts=items.map(i=>i[1]);d.innerHTML=`<div class="sheet"><p>${title}</p>${items.map((i,k)=>`<button class="btn" style="margin-top:12px;${i[2]?'background:#d64545;':'background:var(--gl);color:var(--g);'}" data-a="sh" data-k="${k}">${i[0]}</button>`).join('')}<button class="btn" style="margin-top:10px;background:none;color:var(--mute)" data-a="mno">취소</button></div>`;$('#app').appendChild(d)}
