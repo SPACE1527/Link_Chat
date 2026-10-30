@@ -138,7 +138,7 @@ ${field('이메일','em','이메일 주소를 입력해 주세요','email')}${pw
 <div class="row"><span class="chk" data-a="keep"><span class="box ${S.keep?'on':''}">${S.keep?I('check',12):''}</span>로그인 상태 유지</span><span data-a="forgot" style="cursor:pointer">비밀번호 찾기</span></div>
 <button class="btn" data-a="login" data-enter>로그인</button>
 <p class="row" style="justify-content:center;gap:8px;font-size:13px">아직 계정이 없으신가요? <span class="link" data-a="go" data-k="signup">회원가입</span></p></div>
-<button data-a="inqlink" style="position:absolute;bottom:24px;width:100%;font-size:11px;color:var(--mute)">링크챗 페이지</button></div>`,
+<button data-a="inqlink" style="position:absolute;bottom:24px;width:100%;font-size:11px;color:var(--mute)">문의하기</button></div>`,
 signup:()=>`<div class="scr">${hdr('회원가입')}<div class="body nonav"><p style="font-size:15px;font-weight:700;line-height:1.5">링크 챗에 오신 걸 환영해요 👋</p><p class="sub">몇 가지만 입력하면 바로 시작할 수 있어요</p>
 ${field('이메일','em','이메일 주소를 입력해 주세요','email')}${field('아이디','uid','영문 소문자·숫자·_ 4~20자','text','','autocapitalize="off"')}<p class="help">다른 사람과 겹치지 않는 나만의 아이디예요. 가입 후에는 바꿀 수 없어요</p>
 ${field('이름','nm','이름을 입력해 주세요')}${pwf('비밀번호','pw','8자 이상 입력해 주세요')}<p class="help">영어만 사용 · 특수문자 1개 이상 · 숫자 2개 이상 포함</p>${pwf('비밀번호 확인','pw2','비밀번호를 한 번 더 입력해 주세요')}
@@ -211,7 +211,7 @@ function onIn(){const u=me();if(!u)return;
  const n=total();if(n>lastN&&S.scr!=='chat'){const m=mset();if(m.on)beep(m.snd)}lastN=n}
 addEventListener('storage',e=>{if(e.key===KEY){db=load();onIn();if(S.scr==='settings'||S.scr==='profile')return}if(e.key==='lc_s'&&!sess()){S.scr='login';render()}});
 
-const FORM='https://app.notion.com/p/40747ba07224804f9687facaf5d75397?source=copy_link';
+const FORM='https://docs.google.com/forms/d/e/1FAIpQLSd056SYZhs7XZRvRvgqjIxy5C-dfx_xU_3948azM9FPEwW0bg/viewform?usp=header';
 let acts=[];
 const closeM=()=>{const o=$('#ov');o&&o.remove()};
 function sheet(title,items){closeM();const d=document.createElement('div');d.className='ov';d.id='ov';acts=items.map(i=>i[1]);d.innerHTML=`<div class="sheet"><p>${title}</p>${items.map((i,k)=>`<button class="btn" style="margin-top:12px;${i[2]?'background:#d64545;':'background:var(--gl);color:var(--g);'}" data-a="sh" data-k="${k}">${i[0]}</button>`).join('')}<button class="btn" style="margin-top:10px;background:none;color:var(--mute)" data-a="mno">취소</button></div>`;$('#app').appendChild(d)}
@@ -332,6 +332,8 @@ function start(uid){SID=uid;db=init();db.friends[uid]=[BOT];lastN=0;const fl={};
   Object.keys(fl).forEach(f=>{if(f!==BOT&&!ids.includes(f)){fl[f].forEach(g=>g());delete fl[f];delete db.users[f]}});refresh()});
  const N=(q,key)=>L(q,s=>{db[key]=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.t-a.t);refresh()});
  N(query(C('notes'),where('to','array-contains',uid)),'nin');N(query(C('notes'),where('from','==',uid)),'nout');
+ L(query(C('requests'),where('to','==',uid)),s=>{const n=s.docs.length;if(db.reqIn&&n>db.reqIn.length){toast('새 친구 요청이 왔어요 💌');const m=mset();if(m.on)beep(m.snd)}db.reqIn=s.docs.map(d=>({id:d.id,...d.data()}));refresh()});
+ L(query(C('requests'),where('from','==',uid)),s=>{db.reqOut=s.docs.map(d=>d.data().to);refresh()});
 }
 markRead=(m,p)=>{const k=ck(m,p),last=Math.max(0,...msgsOf(m,p).filter(x=>x.f===p).map(x=>x.t));if(last>lastRead(m,p))setDoc(D('chats',k),{r:{[m]:Math.max(Date.now(),last)}},{merge:true})};
 doOut=()=>{closeM();signOut(auth)};
@@ -369,8 +371,8 @@ A.find=async()=>{const u=me(),q=val('fid').trim().toLowerCase().replace(/^@/,'')
  const R=$('#res'),E=h=>R.innerHTML=`<div class="empty" style="padding:36px 0">${h}</div>`;
  const s=await getDoc(D('ids',q));if(!s.exists())return E('찾는 사용자가 없어요<br>아이디를 다시 확인해 주세요');
  const uid=s.data().uid;if(uid===u.email)return E('내 계정이에요 😄');const g=await getDoc(D('users',uid));if(!g.exists())return E('찾는 사용자가 없어요');
- const t={...g.data(),email:uid},fr=(db.friends[u.email]||[]).includes(uid);
- R.innerHTML=`<div class="res"><div style="display:flex;justify-content:center">${av(t,68)}</div><div style="font-weight:700;font-size:18px;margin-top:14px">${esc(t.name)}</div><div class="sub">@${esc(t.id)}</div><button class="btn ${fr?'alt':''}" ${fr?'disabled':''} data-a="addf" data-e="${esc(uid)}">${fr?'이미 친구예요':I('uplus',18)+'친구 추가'}</button></div>`};
+ const t={...g.data(),email:uid},fr=(db.friends[u.email]||[]).includes(uid),pd=(db.reqOut||[]).includes(uid);
+ R.innerHTML=`<div class="res"><div style="display:flex;justify-content:center">${av(t,68)}</div><div style="font-weight:700;font-size:18px;margin-top:14px">${esc(t.name)}</div><div class="sub">@${esc(t.id)}</div><button class="btn ${fr||pd?'alt':''}" ${fr||pd?'disabled':''} data-a="addf" data-e="${esc(uid)}">${fr?'이미 친구예요':pd?'요청 대기 중':I('uplus',18)+'친구 요청 보내기'}</button></div>`};
 A.addf=async d=>{const u=me(),b=writeBatch(fs);b.set(D('users',u.email,'friends',d.e),{});b.set(D('users',d.e,'friends',u.email),{});await b.commit();toast('친구가 추가됐어요 🎉');S.stack.pop();S.scr='contacts';render()};
 A.send=()=>{const u=me(),el=$('#msg'),x=el.value.trim();if(!x)return;el.value='';el.focus();addDoc(C('chats',ck(u.email,S.peer),'msgs'),{f:u.email,t:Date.now(),x});if(S.peer===BOT)botReply(u.email,x)};
 botSay=(to,x)=>addDoc(C('chats',ck(BOT,to),'msgs'),{f:BOT,t:Date.now(),x});
@@ -384,6 +386,15 @@ A.seldel=()=>{const ids=[...S.sel];if(!ids.length)return toast('삭제할 메시
   b.commit();S.sel=null;render();toast(ids.length+'개의 메시지를 삭제했어요')})};
 A.msgopt=d=>{const u=me(),m=msgsOf(u.email,S.peer).find(x=>mid(x)===d.id);if(!m)return;ask(`<span style="font-weight:400;font-size:13px;color:var(--mute)">“${esc(m.x.slice(0,40))}”</span><br>이 메시지를 삭제할까요?<br><span style="font-weight:400;font-size:12px;color:var(--mute)">내 화면에서만 삭제돼요</span>`,'메시지 삭제',()=>delMsg(m))};
 A.menu=()=>sheet('대화 관리',[['메시지 선택해서 삭제',()=>{S.sel=new Set();render()}],['대화 내용 모두 지우기',()=>{const u=me(),ms=msgsOf(u.email,S.peer);for(let i=0;i<ms.length;i+=450){const b=writeBatch(fs);ms.slice(i,i+450).forEach(m=>b.set(D('users',u.email,'hidden',mid(m)),{}));b.commit()}toast('내 화면에서 대화를 지웠어요')},true],['이 친구 삭제',()=>delFriend(S.peer),true]]);
+
+/* ---- 친구 요청 (수락 / 거절) ---- */
+const reqHtml=()=>{const L=db.reqIn||[];return L.length?`<div class="lh"><span>받은 친구 요청 ${L.length}</span></div>`+L.map(r=>`<div class="item">${av({email:r.from,name:r.fromName},42)}<div class="mid"><div class="nm" style="font-size:14px">${esc(r.fromName)}</div><div class="pv"><span>@${esc(r.fromId)}</span></div></div><button data-a="racc" data-e="${esc(r.from)}" class="btn" style="width:auto;margin:0;height:36px;padding:0 14px;font-size:13px">수락</button><button data-a="rrej" data-e="${esc(r.from)}" class="btn alt" style="width:auto;margin:0 0 0 6px;height:36px;padding:0 14px;font-size:13px">거절</button></div>`).join(''):''};
+{const cl0=contactList;contactList=()=>reqHtml()+cl0()}
+A.addf=async d=>{const u=me(),o=d.e;if((db.reqIn||[]).some(r=>r.from===o))return A.racc({e:o});
+ try{await setDoc(D('requests',u.email+'_'+o),{from:u.email,fromName:u.name,fromId:u.id,to:o,t:Date.now()});toast('친구 요청을 보냈어요 💌');S.stack.pop();S.scr='contacts';render()}catch(x){console.error(x);toast('요청 실패: '+(x.code||x.message))}};
+A.racc=async d=>{const u=me(),o=d.e,b=writeBatch(fs);b.set(D('users',u.email,'friends',o),{});b.set(D('users',o,'friends',u.email),{});b.delete(D('requests',o+'_'+u.email));if((db.reqOut||[]).includes(o))b.delete(D('requests',u.email+'_'+o));
+ try{await b.commit();toast('친구가 됐어요 🎉')}catch(x){console.error(x);toast('수락 실패: '+(x.code||x.message))}};
+A.rrej=async d=>{try{await deleteDoc(D('requests',d.e+'_'+me().email));toast('요청을 거절했어요')}catch(x){console.error(x);toast('거절 실패: '+(x.code||x.message))}};
 
 /* ---- 쪽지 ---- */
 S.nt='in';S.rcp=[];S.pt='f';
