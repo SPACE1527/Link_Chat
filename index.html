@@ -138,7 +138,7 @@ ${field('이메일','em','이메일 주소를 입력해 주세요','email')}${pw
 <div class="row"><span class="chk" data-a="keep"><span class="box ${S.keep?'on':''}">${S.keep?I('check',12):''}</span>로그인 상태 유지</span><span data-a="forgot" style="cursor:pointer">비밀번호 찾기</span></div>
 <button class="btn" data-a="login" data-enter>로그인</button>
 <p class="row" style="justify-content:center;gap:8px;font-size:13px">아직 계정이 없으신가요? <span class="link" data-a="go" data-k="signup">회원가입</span></p></div>
-<button data-a="inqlink" style="position:absolute;bottom:24px;width:100%;font-size:11px;color:var(--mute)">문의하기</button></div>`,
+<button data-a="inqlink" style="position:absolute;bottom:24px;width:100%;font-size:11px;color:var(--mute)">링크 챗 페이지</button></div>`,
 signup:()=>`<div class="scr">${hdr('회원가입')}<div class="body nonav"><p style="font-size:15px;font-weight:700;line-height:1.5">링크 챗에 오신 걸 환영해요 👋</p><p class="sub">몇 가지만 입력하면 바로 시작할 수 있어요</p>
 ${field('이메일','em','이메일 주소를 입력해 주세요','email')}${field('아이디','uid','영문 소문자·숫자·_ 4~20자','text','','autocapitalize="off"')}<p class="help">다른 사람과 겹치지 않는 나만의 아이디예요. 가입 후에는 바꿀 수 없어요</p>
 ${field('이름','nm','이름을 입력해 주세요')}${pwf('비밀번호','pw','8자 이상 입력해 주세요')}<p class="help">영어만 사용 · 특수문자 1개 이상 · 숫자 2개 이상 포함</p>${pwf('비밀번호 확인','pw2','비밀번호를 한 번 더 입력해 주세요')}
@@ -160,7 +160,7 @@ settings:()=>{const u=me(),m=mset();return`<div class="scr"><div class="body"><h
 <div class="card"><button class="si" data-a="go" data-k="sound"><span class="sio">${I('bell',19)}</span><span class="t">알림음</span><span class="v">${m.on?SOUNDS[m.snd][0]:'꺼짐'}</span>${I('chevR',17)}</button>
 <button class="si" data-a="go" data-k="about"><span class="sio">${I('info',19)}</span><span class="t">앱 정보</span><span class="v">v1.0</span>${I('chevR',17)}</button></div>
 <div class="card"><button class="si" data-a="logout"><span class="sio">${I('out',19)}</span><span class="t">로그아웃</span>${I('chevR',17)}</button>
-<button class="si" data-a="inqlink"><span class="sio">${I('help',19)}</span><span class="t">문의하기</span>${I('chevR',17)}</button>
+<button class="si" data-a="inqlink"><span class="sio">${I('help',19)}</span><span class="t">링크 챗 페이지</span>${I('chevR',17)}</button>
 <button class="si" data-a="go" data-k="withdraw"><span class="sio" style="color:#d64545">${I('trash',19)}</span><span class="t" style="color:#d64545">계정 탈퇴</span>${I('chevR',17)}</button></div></div>${nav()}</div>`},
 profile:()=>{const u=me();return`<div class="scr">${hdr('프로필 편집')}<div class="body nonav"><div style="display:flex;justify-content:center;margin:12px 0">${av(u,96)}</div>
 ${field('이름','pn','이름','text',u.name,'maxlength=12')}${field('상태 메시지','ps','상태 메시지를 입력해 주세요','text',u.status||'','maxlength=40')}
