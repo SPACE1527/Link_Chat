@@ -172,7 +172,7 @@ ${SOUNDS.map((s,i)=>`<div class="snd ${m.snd===i?'on':''}" data-a="pick" data-k=
 withdraw:()=>`<div class="scr">${hdr('계정 탈퇴')}<div class="body nonav"><div class="note" style="background:#fdeaea;color:#d64545;margin-top:6px">${I('info',18)}<span>탈퇴하면 계정, 친구 목록, 대화 내용이 모두 삭제되고 되돌릴 수 없어요</span></div>${pwf('비밀번호 확인','wp','비밀번호를 입력해 주세요')}<button class="btn" style="background:#d64545" data-a="withdraw" data-enter>탈퇴하기</button></div></div>`,
 about:()=>`<div class="scr">${hdr('앱 정보')}<div class="body nonav" style="text-align:center"><div style="width:100px;height:100px;border-radius:30px;background:var(--gl);margin:40px auto 24px;display:flex;align-items:center;justify-content:center"><div style="width:70px;height:70px;border-radius:22px;background:var(--g);color:#fff;font-size:20px;font-weight:700;line-height:1.2;display:flex;align-items:center;justify-content:center;text-align:center">링<br>크</div></div>
 <h1 style="padding:0;font-size:30px">링크 챗</h1><p class="sub" style="margin-top:12px">버전 1.0<br>MASTER STUDIO 제작</p><p style="margin-top:36px;font-size:14px;font-weight:700;color:var(--g)">나, 너, 우리</p><p class="sub" style="margin-top:8px">가까운 사람들과 더 가볍게,<br>더 따뜻하게 이어지는 메신저예요.</p></div></div>`,
-inq:()=>`<div class="scr">${hdr('문의하기')}<div class="body nonav"><p class="sub" style="font-size:13px;margin:0">불편한 점이나 궁금한 점을 남겨 주세요.<br>확인 후 빠르게 답변드릴게요.</p>
+inq:()=>`<div class="scr">${hdr('링크 챗 페이지')}<div class="body nonav"><p class="sub" style="font-size:13px;margin:0">불편한 점이나 궁금한 점을 남겨 주세요.<br>확인 후 빠르게 답변드릴게요.</p>
 <label class="lbl">문의 유형</label><div class="in"><select id="iq"><option>계정 · 로그인</option><option>친구 · 대화</option><option>오류 신고</option><option>기타</option></select></div>
 ${field('제목','it','제목을 입력해 주세요')}<label class="lbl">문의 내용</label><div class="in ta"><textarea id="ic" maxlength="500" placeholder="문의 내용을 자세히 적어 주세요"></textarea><span class="help" id="cnt" style="text-align:right;margin:0">0 / 500</span></div>
 <div class="chk" data-a="agree" style="margin-top:18px;font-size:12px"><span class="box ${S.agree?'on':''}">${S.agree?I('check',12):''}</span>개인정보 수집 및 이용에 동의해요 (필수)</div><button class="btn" data-a="inq">문의 보내기</button></div></div>`
@@ -211,7 +211,7 @@ function onIn(){const u=me();if(!u)return;
  const n=total();if(n>lastN&&S.scr!=='chat'){const m=mset();if(m.on)beep(m.snd)}lastN=n}
 addEventListener('storage',e=>{if(e.key===KEY){db=load();onIn();if(S.scr==='settings'||S.scr==='profile')return}if(e.key==='lc_s'&&!sess()){S.scr='login';render()}});
 
-const FORM='https://docs.google.com/forms/d/e/1FAIpQLSd056SYZhs7XZRvRvgqjIxy5C-dfx_xU_3948azM9FPEwW0bg/viewform?usp=header';
+const FORM='https://app.notion.com/p/40747ba07224804f9687facaf5d75397?source=copy_link';
 let acts=[];
 const closeM=()=>{const o=$('#ov');o&&o.remove()};
 function sheet(title,items){closeM();const d=document.createElement('div');d.className='ov';d.id='ov';acts=items.map(i=>i[1]);d.innerHTML=`<div class="sheet"><p>${title}</p>${items.map((i,k)=>`<button class="btn" style="margin-top:12px;${i[2]?'background:#d64545;':'background:var(--gl);color:var(--g);'}" data-a="sh" data-k="${k}">${i[0]}</button>`).join('')}<button class="btn" style="margin-top:10px;background:none;color:var(--mute)" data-a="mno">취소</button></div>`;$('#app').appendChild(d)}
